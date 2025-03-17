@@ -1,0 +1,35 @@
+- hosts: all
+  become: yes
+  tasks:
+    - name: Update apt package index
+      apt:
+        update_cache: yes
+
+    - name: Install MySQL Server
+      apt:
+        name: mysql-server
+        state: present
+
+    - name: Start MySQL Service
+      service:
+        name: mysql
+        state: started
+        enabled: yes
+
+    - name: Create MySQL Database
+      mysql_db:
+        name: mydatabase
+        state: present
+        login_user: root
+        login_password: mypassword
+
+    - name: Create MySQL User
+      mysql_user:
+        name: myuser
+        password: mypassword
+        priv: "mydatabase.*:ALL"
+        state: present
+        login_user: root
+        login_password: mypassword
+
+

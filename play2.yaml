@@ -1,0 +1,84 @@
+- hosts: all
+  become: yes
+  tasks:
+    - name: Update apt package index
+      apt:
+        update_cache: yes
+
+    - name: Install required dependencies
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present
+
+    - name: Add Docker GPG key
+      shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+
+    - name: Add Docker repository
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release | lower }} stable"
+        state: present
+
+    - name: Install Docker
+      apt:
+        name: docker-ce
+        state: present
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Create docker group
+      group:
+        name: docker
+        state: present
+
+    - name: Add user to docker group
+      user:
+        name: ubuntu
+        groups: docker
+        append: yes
+
+    - name: Pull MySQL Docker image
+      docker_image:
+        name: mysql
+        tag: latest
+        source: pull
+
+    - name: Build custom Docker image
+      docker_image:
+        name: myapp
+        tag: v1
+        source: build
+        build:
+          path: "/home/ubuntu/ansible"
+
+    - name: Create a Docker volume
+      docker_volume:
+        name: mysql_data
+        state: present
+
+    - name: Create a Docker network
+      docker_network:
+        name: my_network
+        state: present
+
+    - name: Run MySQL container with volume and network
+      docker_container:
+        name: mysql-container
+        image: mysql:latest
+        state: started
+        ports:
+          - "3306:3306"
+        env:
+          MYSQL_ROOT_PASSWORD: "mypassword"
+          MYSQL_DATABASE: "testdb"
+        volumes:
+          - mysql_data:/var/lib/mysql
+        networks:
+          - name: my_network

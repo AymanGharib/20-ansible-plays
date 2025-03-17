@@ -1,0 +1,40 @@
+
+- hosts : all
+  become: yes
+  tasks:
+    - name: Create a user
+      user:
+        name: ayman
+        state: present
+        create_home: yes
+
+    - name: Create .ssh directory for the user
+      file:
+        path: "/home/ayman/.ssh"
+        state: directory
+        mode: "0700"
+        owner: ayman
+        group: ayman
+
+    - name: Generate SSH key pair
+      openssh_keypair:
+        path: "/home/ayman/.ssh/id_rsa"
+        type: rsa
+        owner: ayman
+        group: ayman
+
+    - name: Copy the public key to the user's authorized_keys
+      copy:
+        src: "/home/ayman/.ssh/id_rsa.pub"
+        dest: "/home/ayman/.ssh/authorized_keys"
+        mode: '0600'
+        owner: ayman
+        group: ayman
+        remote_src: yes  # Indicating the file is on the remote system
+
+    - name: Set proper permissions for the SSH private key
+      file:
+        path: "/home/ayman/.ssh/id_rsa"
+        mode: '0600'
+        owner: ayman
+        group: ayman
