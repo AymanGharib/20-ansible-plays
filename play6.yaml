@@ -1,0 +1,40 @@
+---
+- name: Create and manage multiple users in bulk
+  hosts: all
+  become: true
+  vars:
+    # List of users
+    users:
+      - user1
+      - user2
+      - user3
+      - user4
+      - user5
+
+    # List of groups
+    groups:
+      - group1
+      - group2
+      - group3
+      - group4
+      - group5
+
+  tasks:
+    - name: Create users
+      user:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ users }}"
+    
+    - name: Create groups
+      group:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ groups }}"
+
+    - name: Add users to groups
+      user:
+        name: "{{ users[item] }}"
+        groups: "{{ groups[item] }}"
+        append: yes
+      loop: "{{ range(0, users | length) | list }}"
