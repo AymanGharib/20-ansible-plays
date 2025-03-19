@@ -1,0 +1,12 @@
+- name: Monitor Apache Service and Restart If Stopped
+  hosts: all
+  become: true
+  tasks:
+    - name: Gather service facts
+      service_facts:
+
+    - name: Check if Apache is running
+      service:
+        name: apache2
+        state: restarted
+      when: "'apache2' not in ansible_facts.services or ansible_facts.services['apache2'].state != 'running'"

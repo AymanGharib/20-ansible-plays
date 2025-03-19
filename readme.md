@@ -53,3 +53,8 @@ This playbook installs MySQL, starts the MySQL service, and creates a database a
    - Creates a specified database within MySQL.
 4. **Create MySQL User**
    - Creates a new MySQL user and grants permissions to the newly created database.
+
+
+  play5: check if apache is runing 
+  gather service facts 
+  restart service if not runing
