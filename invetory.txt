@@ -1,0 +1,13 @@
+[control]
+ubuntu@ec2-44-206-247-118.compute-1.amazonaws.com
+[dev]
+ubuntu@ec2-54-165-254-197.compute-1.amazonaws.com
+[prod]
+ec2-3-92-197-64.compute-1.amazonaws.com
+[control:vars]
+ansible_connection=local
+[prod:vars]
+ansible_user=ubuntu
+[linux:children]
+dev
+prod
