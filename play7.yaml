@@ -1,0 +1,40 @@
+---
+- name: Create a System Backup Using TAR
+  hosts: localhost
+  become: true
+  vars:
+    # List of files to be created
+    files_to_create:
+      - "/tmp/file1.txt"
+      - "/tmp/file2.txt"
+      - "/tmp/file3.txt"
+      - "/tmp/file4.txt"
+      - "/tmp/file5.txt"
+
+    # Path to store the backup
+    backup_dest: "/tmp/system_backup.tar.gz"
+
+  tasks:
+    - name: Create files
+      copy:
+        dest: "{{ item }}"
+        content: "This is a placeholder file created for backup purpose."
+        mode: '0644'
+      loop: "{{ files_to_create }}"
+
+    - name: Create a backup of important files using tar
+      command: "tar czf {{ backup_dest }} -C /tmp {{ item }}"
+      loop: "{{ files_to_create }}"
+      # Removed 'removes' argument so original files are not deleted
+
+    - name: Verify the backup file
+      stat:
+        path: "{{ backup_dest }}"
+      register: backup_stat
+
+    - name: Copy the backup to local destination
+      copy:
+        src: "{{ backup_dest }}"
+        dest: "/home/{{ ansible_user }}/backup/"
+        remote_src: yes
+      when: backup_stat.stat.exists

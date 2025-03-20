@@ -53,14 +53,46 @@ This playbook installs MySQL, starts the MySQL service, and creates a database a
    - Creates a specified database within MySQL.
 4. **Create MySQL User**
    - Creates a new MySQL user and grants permissions to the newly created database.
- play4: 
 
-  play5: check if apache is runing 
-  gather service facts 
-  restart service if not runing
+## Playbook 4: (Not Defined Yet)
 
-  play6 : 
-  create 2 lists one with grps and one with users
-  create the users using a loop
-  create the grps using loops
-  assign each user with the grp having the same index
+_(Add details here when Playbook 4 is defined.)_
+
+## Playbook 5: Check if Apache is Running and Restart If Stopped
+
+This playbook checks if the Apache service is running, gathers service facts, and restarts it if necessary.
+
+### Tasks:
+1. **Check if Apache is Running**
+   - Checks if Apache is running using the `service` module.
+2. **Gather Service Facts**
+   - Collects service-related information.
+3. **Restart Apache if Not Running**
+   - Restarts Apache service if it is not running.
+
+## Playbook 6: Create and Assign Users to Groups
+
+This playbook creates users from a list and assigns them to corresponding groups based on the index.
+
+### Tasks:
+1. **Create Users**
+   - Creates a list of users using a loop.
+2. **Create Groups**
+   - Creates a list of groups using a loop.
+3. **Assign Users to Groups**
+   - Assigns each user to the corresponding group, based on the index of the user and group.
+
+## Playbook 7: Create a System Backup Using TAR
+
+This playbook creates files, compresses them into a backup using the `tar` command, and copies the backup locally.
+
+### Tasks:
+1. **Create Files**
+   - Creates a list of files with dummy content.
+2. **Create a Backup Using tar**
+   - Compresses the created files into a backup using the `tar` command.
+3. **Verify Backup Exists**
+   - Uses the `stat` module to check if the backup file exists.
+4. **Copy the Backup Locally**
+   - Copies the backup to a local destination if it exists.
+
