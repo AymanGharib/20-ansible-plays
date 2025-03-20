@@ -106,3 +106,17 @@ This playbook sets up a cron job to back up a specified directory to a local bac
    
 2. **Create the Cron Job**
    - Sets up a cron job to run at midnight. The cron job will create a `.tar.gz` archive of the specified directory and store it in the backup directory.
+
+## Playbook 9: Update Nginx to a Specific Version
+
+This playbook updates Nginx to a specified version on the target machine.
+
+### Tasks:
+1. **Install Nginx from the Official Repository**
+   - Installs a specific version of Nginx from the official repository.
+   
+2. **Ensure the Nginx Service is Running**
+   - Ensures that the Nginx service is started and enabled after the update.
+   
+3. **Verify the Installed Version**
+   - Verifies the Nginx version to ensure the correct version is installed.
