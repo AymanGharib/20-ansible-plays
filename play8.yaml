@@ -1,0 +1,31 @@
+---
+- name: Configure a Cron Job to Backup Files Locally
+  hosts: localhost
+  become: true
+  vars:
+    # Directory to be backed up
+    source_dir: "/tmp"
+    # Local backup destination
+    backup_dir: "/backup"
+    # Cron job timing
+    cron_time: "0 0 * * *"  # Midnight every night
+    # Backup filename with date format
+    backup_filename: "backup_$(date +\%F).tar.gz"
+
+  tasks:
+    - name: Ensure the backup directory exists
+      file:
+        path: "{{ backup_dir }}"
+        state: directory
+        mode: '0755'
+
+    - name: Create a cron job for backup
+      cron:
+        name: "Backup files locally"
+        minute: "0"
+        hour: "0"
+        day: "*"
+        month: "*"
+        weekday: "*"
+        job: "tar -czf {{ backup_dir }}/{{ backup_filename }} -C {{ source_dir }} ."
+        state: present

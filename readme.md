@@ -96,3 +96,13 @@ This playbook creates files, compresses them into a backup using the `tar` comma
 4. **Copy the Backup Locally**
    - Copies the backup to a local destination if it exists.
 
+## Playbook 7: Configure a Cron Job to Backup Files Locally
+
+This playbook sets up a cron job to back up a specified directory to a local backup directory every night at midnight.
+
+### Tasks:
+1. **Ensure the Backup Directory Exists**
+   - Creates the backup directory if it doesn’t already exist. This ensures that there’s a dedicated space for storing backup archives.
+   
+2. **Create the Cron Job**
+   - Sets up a cron job to run at midnight. The cron job will create a `.tar.gz` archive of the specified directory and store it in the backup directory.
