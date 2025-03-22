@@ -12,4 +12,5 @@ spec:
     - protocol: TCP
       port: 9003         # The port inside the cluster that the gateway listens on
       targetPort: 8080      # The target port on the container (same as containerPort)
-      
+      bla 
+      bla
