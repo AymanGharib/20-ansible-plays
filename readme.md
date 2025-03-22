@@ -120,3 +120,25 @@ This playbook updates Nginx to a specified version on the target machine.
    
 3. **Verify the Installed Version**
    - Verifies the Nginx version to ensure the correct version is installed.
+
+playbook 10 : install kind 
+install docker 
+install kubectl
+install kind 
+create cluster (mononode)
+copy the kubeconfig locally 
+and modify it so it points to the ip of the node 
+
+
+playbook11 : deploy a k8s deployement 
+
+clone a repo where k8s  manifests exists 
+deploy them 
+
+playbook 12 : install jenkins as container 
+install docker 
+run  jenkins as a docker container and set it to use the docker sock installed locally 
+
+
+
+
