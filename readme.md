@@ -130,6 +130,7 @@ copy the kubeconfig locally
 and modify it so it points to the ip of the node 
 
 
+
 playbook11 : deploy a k8s deployement 
 
 clone a repo where k8s  manifests exists 
