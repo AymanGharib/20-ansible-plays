@@ -1,0 +1,24 @@
+- hosts: localhost
+  become: yes
+  tasks: 
+    - name: Clone Git repository containing Kubernetes manifests
+      git:
+        repo: 'https://github.com/AymanGharib/20-ansible-plays.git'
+        dest: /tmp/repo
+        clone: yes
+        update: yes
+    - name: Create k8s_manifests directory
+      file:
+        path: /home/ubuntu/ansible/k8s
+        state: directory
+        mode: '0755'
+
+
+    - name: Copy files from cloned repo to the k8s_manifests directory
+      copy:
+        src: /tmp/repo/k8s-manifests/
+        dest: /home/ubuntu/ansible/k8s
+        remote_src: yes
+    - name : apply the maifests
+   
+      command: kubectl apply -f /home/ubuntu/ansible/k8s/
