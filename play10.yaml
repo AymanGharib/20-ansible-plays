@@ -1,0 +1,75 @@
+- hosts: localhost
+  become: yes
+  tasks:
+    - name: Update apt package index
+      apt:
+        update_cache: yes
+
+    - name: Install required dependencies
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present
+
+    - name: Add Docker GPG key
+      get_url:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        dest: /etc/apt/trusted.gpg.d/docker.asc
+
+    - name: Add Docker repository
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release | lower }} stable"
+        state: present
+
+    - name: Install Docker
+      apt:
+        name: docker-ce
+        state: present
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Install kubectl manually
+      shell: |
+        curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.26.0/bin/linux/amd64/kubectl
+        sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+    
+
+    
+    - name: Install Kind
+      get_url:
+        url: https://kind.sigs.k8s.io/dl/latest/kind-linux-amd64
+        dest: /usr/local/bin/kind
+        mode: '0755'
+
+    - name: Check if Kind cluster exists
+      command: kind get clusters
+      register: kind_clusters
+      changed_when: false
+
+    - name: Create Kind Cluster if not exists
+      command: kind create cluster
+      when: "'kind' not in kind_clusters.stdout"
+
+    - name: Get Ansible host IP
+      command: hostname -I
+      register: ansible_host_ip
+      changed_when: false
+
+    - name: Wait for kubeconfig to be available
+      wait_for:
+        path: ~/.kube/config
+        timeout: 30
+
+    - name: Replace localhost with Ansible host IP in Kubeconfig
+      replace:
+        path: ~/.kube/config
+        regexp: 'https://127\.0\.0\.1:6443'
+        replace: "https://{{ ansible_host_ip.stdout.split()[0] }}:6443"
