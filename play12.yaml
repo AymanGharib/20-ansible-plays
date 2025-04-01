@@ -1,0 +1,35 @@
+- hosts : localhost
+  become : true
+  tasks: 
+    - name: Create directory for Jenkins data
+      file:
+        path: /var/jenkins_home
+        state: directory
+        mode: '0755'
+
+    - name: Set ownership for Jenkins data directory
+      file:
+        path: /var/jenkins_home
+        owner: 1000
+        group: 1000
+        recurse: yes
+
+    # Task to pull the Jenkins image from Docker Hub
+    - name: Pull Jenkins Docker image
+      docker_image:
+        name: jenkins/jenkins
+        tag: lts
+        source: pull
+
+    # Task to run Jenkins container with Docker socket and host network
+    - name: Run Jenkins as Docker container
+      docker_container:
+        name: jenkins
+        image: jenkins/jenkins:lts
+        state: started
+        restart_policy: always
+        user: root
+        volumes:
+          - /var/jenkins_home:/var/jenkins_home
+          - /var/run/docker.sock:/var/run/docker.sock
+        network_mode: host
