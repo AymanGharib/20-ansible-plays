@@ -141,5 +141,24 @@ install docker
 run  jenkins as a docker container and set it to use the docker sock installed locally 
 
 
+play13 : use vault to store db creds 
+first run 
+ansible-vault create secret.yml
+add creds  use em in a playbook 
+this will prompt to enter the vault password 
+ansible-playbook playbook.yml --ask-vault-pass
+or store the password in a file and :
+ansible-playbook playbook.yml --vault-password-file vault_pass.txt
+
+
+
+
+play 14 : understanding blocks :
+A block allows you to group multiple tasks together logically. If one task fails inside a block, you can handle it using rescue or always.
+
+play15 : understanding tags 
+Tags allow you to run specific tasks in a playbook without executing everything.
+e.g :
+ansible-playbook playbook.yml --tags install
 
 

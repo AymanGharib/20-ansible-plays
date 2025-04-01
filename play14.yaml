@@ -1,0 +1,23 @@
+- name: Install nginx
+  hosts: localhost
+  tasks:
+    - block:
+        - name: Install nginx
+          apt:
+            name:  nginx
+            state: present
+
+        - name: Start nginx
+          service:
+            name: nginx
+            state: started
+
+      rescue:
+        - name: Notify about failure
+          debug:
+            msg: "nginx installation failed!"
+
+      always:
+        - name: RUN no mather what (success or failure)
+          debug:
+            msg: " completed."

@@ -1,0 +1,11 @@
+
+
+
+- name: Secure Database Setup
+  hosts: localhost
+  vars_files:
+    - secret.yml
+  tasks:
+    - name: Show Database Credentials
+      debug:
+        msg: "DB User: {{ db_user }}"
