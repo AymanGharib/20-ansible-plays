@@ -1,6 +1,7 @@
-- hosts: localhost
-  become: yes
-  tasks:
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for kind
+
     - name: Update apt package index
       apt:
         update_cache: yes
@@ -71,9 +72,4 @@
         path: ~/.kube/config
         regexp: 'https://127\.0\.0\.1:6443'
         replace: "https://{{ ansible_host_ip.stdout.split()[0] }}:6443"
-
-  handlers:
-    - name: Restart Docker
-      service:
-        name: docker
-        state: restarted
+#

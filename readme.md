@@ -162,3 +162,4 @@ e.g :
 ansible-playbook playbook.yml --tags install
 
 
+play16 : were gonna remake the play10 (installin a kind cluster) using roles

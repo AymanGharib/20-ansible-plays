@@ -1,0 +1,6 @@
+- hosts: localhost
+  become: yes
+  roles : 
+     - kind
+
+      scp -i "C:\Users\ayman\Downloads/homw-key.pem" ubuntu@13.61.8.99:/home/ubuntu/ansible/kind   ./
